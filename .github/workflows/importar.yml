@@ -1,0 +1,33 @@
+
+name: Importar SIXVOID API
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  importar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extrair projeto
+        run: |
+          mkdir extracted
+          unzip -o SIXVOID_parte_1.zip -d extracted
+          unzip -o SIXVOID_parte_2.zip -d extracted
+          cp -a extracted/SIXVOID_API_V4.1/. .
+          rm -rf extracted
+          rm SIXVOID_parte_1.zip SIXVOID_parte_2.zip
+
+      - name: Salvar no GitHub
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Importar SIXVOID API V4.1" || true
+          git push
+          
